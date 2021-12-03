@@ -21,7 +21,7 @@ void printLine(char line[], size_t h_border, size_t maxArgsSize, FILE *output);
 
 size_t maxArgsSize(char **args);
 
-void printBox(char text[], size_t h_border, size_t v_border, FILE *output);
+void makeBox(char text[], size_t h_border, size_t v_border, FILE *output);
 
 
 #endif // BOX_H_

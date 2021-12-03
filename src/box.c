@@ -113,7 +113,7 @@ size_t maxArgsSize(char **args)
     }
     return max;
 }
-void printBox(char text[], size_t h_border, size_t v_border, FILE *output)
+void makeBox(char text[], size_t h_border, size_t v_border, FILE *output)
 {
     char *text_p = strdup(text);
     char **args = malloc(sizeof(char *) * 100);
@@ -144,15 +144,15 @@ int main()
 
     printf(BOLD_BLUE);
 
-    printBox(" MENU" RED UNICODE_X BOLD_BLUE
+    makeBox(" MENU" RED UNICODE_X BOLD_BLUE
              "\n1. Jogar" GREEN THIN_TICK BOLD_BLUE
              "\n2. Editar "
              "\n3. Sair " RED UNICODE_X UNICODE_X BOLD_BLUE,
              2, 1, stdout);
     printf(RESET);
 
-    printBox(fruits[50],
+    makeBox(fruits[50],
              2, 6, stdout);
-    printBox(ball,
+    makeBox(ball,
              2, 2, stdout);
 }
