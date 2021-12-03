@@ -2,4 +2,4 @@
 
 set -xe
 
-gcc -o box -Wall -Wpedantic -I headers ./src/box.c
+gcc -o box -ggdb -Wall -Wpedantic -I headers ./src/box.c
