@@ -1,2 +1,3 @@
-# cliTool-c
-Command-Line Interface in c
+# `cliTool-c`
+
+Small Command-Line Interface lib in c
