@@ -18,8 +18,8 @@ char getch()
     bitwise and (&) this value with x, the result is to keep unchanged all bits 
     of x matching a "1" bit in the mask 0x7FFF, and "turn off" the bits of x 
     matching a "0" bit in the mask, which is exactly the ICANON bit in this specific case.
-    */
-   
+    */ /* https://stackoverflow.com/questions/20948621/what-does-mean */
+
     old.c_lflag &= ~ECHO;
     old.c_cc[VMIN] = 1;
     old.c_cc[VTIME] = 0;
