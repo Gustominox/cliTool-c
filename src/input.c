@@ -1,5 +1,6 @@
 #include <unistd.h>
 #include <termios.h>
+#include <stdio.h>
 
 char getch()
 {
@@ -11,7 +12,7 @@ char getch()
 
     old.c_lflag &= ~ICANON; // old.c_lflag = (old.c_lflag) & (~(ICANON));
     /*
-    The code turns off the ICANON bit. 
+    This code turns off the ICANON bit. 
     The ICANON defines a bit through a mask, e.g. 0x8000 (the ICANON bit is the 
     one having value 1, when you apply the bitwise not operator, ~, all bits are
     "inverted" and you have (if the values are 16bit wide) 0x7FFF. If you put in
@@ -41,7 +42,7 @@ char getch()
 int main()
 {
     char c;
-    while (c = getch())
+    while ((c = getch()))
     {
         printf("CHAR: %d\n", c);
     }
