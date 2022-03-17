@@ -81,12 +81,21 @@ char *printLine(char line[], size_t h_border, size_t maxArgsSize, char *output);
 size_t maxArgsSize(char **args);
 
 /**
- * \brief Creates a Cli Box using unicode characters
+ * \brief Creates a Cli Box using unicode characters.
+ *
  * @param text Content to be added to box, separating lines with '\\n' char
  * @param h_border Number of spaces to add to the horizontal border
  * @param v_border Number of lines to add to the vertical border
  * @return Dynamic string that contains the box specified in the function arguments
+ *
  */
 char *makeBox(char text[], size_t h_border, size_t v_border);
+/**
+ * Example Call: char *str = makeBox(" MENU" RED UNICODE_X RESET
+ *                           "\n1. Jogar" GREEN THIN_TICK RESET
+ *                           "\n2. Editar "
+ *                           "\n3. Sair " RED UNICODE_X RESET,
+ *                           4, 4);
+ */
 
 #endif // BOX_H_
