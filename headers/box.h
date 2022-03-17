@@ -6,6 +6,15 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
+/*!
+ * @typedef table
+ *
+ * @field   paginas       Array de páginas (dos resultados obtidos nas queries)
+ * @field   numLin        O número da linha atual
+ * @field   numLinTotal   O número de linhas totais
+ */
+typedef struct box *BOX;
+
 /**
  * \brief Function that concatenates a dynamic string with a string literal
  *        allocating space for the new concatenated dynamic string.
@@ -16,20 +25,20 @@
 char *strcatrealloc(char *str1, char str2[]);
 
 /**
- * \brief Creates Header for box that is being created.
+ * \brief Adds Header for box that is being created.
  * @param col Number of column's in box
  * @param output Dynamic string to which header is added
  * @return Dynamic string with header
  */
-char *printHead(size_t col, char *output);
+char *addHead(size_t col, char *output);
 
 /**
- * \brief Creates Bottom for box that is being created.
+ * \brief Adds Bottom for box that is being created.
  * @param col Number of column's in box
  * @param output Dynamic string to which Bottom is added
  * @return Dynamic string with Bottom
  */
-char *printClose(size_t col, char *output);
+char *addClose(size_t col, char *output);
 
 /**
  * \brief Adds horizontal border/buffer of spaces speciefied.
@@ -37,7 +46,7 @@ char *printClose(size_t col, char *output);
  * @param output Dynamic string to which spaces are added
  * @return Dynamic string with spaces
  */
-char *printHBorder(size_t h_border, char *output);
+char *addHBorder(size_t h_border, char *output);
 
 /**
  * \brief Adds Empty line with horizontal border.
@@ -45,7 +54,7 @@ char *printHBorder(size_t h_border, char *output);
  * @param output Dynamic string to which line is added
  * @return Dynamic string with Empty line
  */
-char *printEmptyLine(size_t col, char *output);
+char *addEmptyLine(size_t col, char *output);
 
 /**
  * \brief Adds vertical border/buffer of lines speciefied.
@@ -54,7 +63,7 @@ char *printEmptyLine(size_t col, char *output);
  * @param output Dynamic string to which lines are added
  * @return Dynamic string with lines
  */
-char *printVBorder(size_t v_border, size_t col, char *output);
+char *addVBorder(size_t v_border, size_t col, char *output);
 
 /**
  * \brief Calculates string length taking into account unicode simbols.
@@ -66,12 +75,13 @@ size_t strlen_unicode(char string[]);
 /**
  * \brief Adds line with argument in the middle.
  * @param line Argument to add
+ * @param color Argument color
  * @param h_border Number of spaces to add to the horizontal border
  * @param  maxArgsSize Size of the bigger argument, used for formating
  * @param output Dynamic string to which line is added
  * @return Dynamic string with Argument line
  */
-char *printLine(char line[], size_t h_border, size_t maxArgsSize, char *output);
+char *addLine(char line[], char color[], size_t h_border, size_t maxArgsSize, char *output);
 
 /**
  * \brief Given an array of strings, returns the size of the bigger one.

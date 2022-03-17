@@ -4,7 +4,6 @@
 #include "fruits.h"
 #include "ball.h"
 
-
 char *strcatrealloc(char *str1, char str2[])
 {
     size_t str1len = 0;
@@ -18,7 +17,6 @@ char *strcatrealloc(char *str1, char str2[])
     // It's easy to forget that strlen doesn't count the
     // trailing NULL character,
     size_t neededbufferlen = str1len + str2len + 1;
-
 
     char *strdest = (char *)malloc(neededbufferlen * sizeof(char));
     if (strdest)
@@ -40,7 +38,7 @@ char *strcatrealloc(char *str1, char str2[])
     return strdest;
 }
 
-char *printHead(size_t col, char *output)
+char *addHead(size_t col, char *output)
 {
     output = strcatrealloc(output, T_L_A);
     for (size_t i = 0; i < col; i++)
@@ -52,7 +50,7 @@ char *printHead(size_t col, char *output)
     return output;
 }
 
-char *printClose(size_t col, char *output)
+char *addClose(size_t col, char *output)
 {
 
     output = strcatrealloc(output, B_L_A);
@@ -66,14 +64,14 @@ char *printClose(size_t col, char *output)
     return output;
 }
 
-char *printHBorder(size_t h_border, char *output)
+char *addHBorder(size_t h_border, char *output)
 {
     for (size_t i = 0; i < h_border; i++)
         output = strcatrealloc(output, " ");
     return output;
 }
 
-char *printEmptyLine(size_t col, char *output)
+char *addEmptyLine(size_t col, char *output)
 {
     output = strcatrealloc(output, V_L);
     for (size_t i = 0; i < col; i++)
@@ -83,10 +81,10 @@ char *printEmptyLine(size_t col, char *output)
     return output;
 }
 
-char *printVBorder(size_t v_border, size_t col, char *output)
+char *addVBorder(size_t v_border, size_t col, char *output)
 {
     for (size_t i = 0; i < v_border; i++)
-        output = printEmptyLine(col, output);
+        output = addEmptyLine(col, output);
     return output;
 }
 
@@ -122,11 +120,13 @@ size_t strlen_unicode(char string[])
     return tmh;
 }
 
-char *printLine(char line[], size_t h_border, size_t maxArgsSize, char *output)
+char *addLine(char line[], char color[], size_t h_border, size_t maxArgsSize, char *output)
 {
     output = strcatrealloc(output, V_L);
-    output = printHBorder(h_border, output);
+    output = addHBorder(h_border, output);
+    output = strcatrealloc(output, color);
     output = strcatrealloc(output, line);
+    output = strcatrealloc(output, RESET);
     size_t line_size = strlen_unicode(line);
     size_t buffer;
     if (maxArgsSize > line_size)
@@ -137,7 +137,7 @@ char *printLine(char line[], size_t h_border, size_t maxArgsSize, char *output)
     {
         buffer = h_border;
     }
-    output = printHBorder(buffer, output);
+    output = addHBorder(buffer, output);
     output = strcatrealloc(output, V_L);
     output = strcatrealloc(output, "\n");
     return output;
@@ -165,26 +165,34 @@ char *makeBox(char text[], size_t h_border, size_t v_border)
     char *text_p_free = text_p;
     char **args = malloc(sizeof(char *) * 100);
     char *token;
-    int i = 0, k = 0;
+    int selected = 4;
+    int num_args = 0, k = 0;
     while ((token = strtok_r(text_p, "\n", &text_p)))
     {
-        args[i] = strdup(token);
-        i++;
+        args[num_args] = strdup(token);
+        num_args++;
     }
-    args[i] = NULL;
+    args[num_args] = NULL;
     size_t max_args_size = maxArgsSize(args);
     size_t col = max_args_size + (2 * h_border);
-    output = printHead(col, output);
+    output = addHead(col, output);
 
-    output = printVBorder(v_border, col, output);
-
+    output = addVBorder(v_border, col, output);
+    if (selected >= num_args)
+        perror("ERROR: Selected index out of bounds");
     while (args[k])
     {
-        output = printLine(args[k], h_border, max_args_size, output);
+        char *color;
+        if (k == selected)
+            color = BOLD_YELLOW;
+        else
+            color = RESET;
+
+        output = addLine(args[k], color, h_border, max_args_size, output);
         k++;
     }
-    output = printVBorder(v_border, col, output);
-    output = printClose(col, output);
+    output = addVBorder(v_border, col, output);
+    output = addClose(col, output);
 
     // Free dynamic memory
     free(text_p_free);
@@ -198,10 +206,20 @@ char *makeBox(char text[], size_t h_border, size_t v_border)
     return output;
 }
 
+struct box
+{
+    char **color;
+    char **items;
+};
+
 int main()
 {
+    
+    char *str = makeBox(ball,
+                        4, 4);
+    printf("%s", str);
 
-    char *str = makeBox(" MENU" RED UNICODE_X RESET
+    str = makeBox(" MENU" RED UNICODE_X RESET
                   "\n1. Jogar" GREEN THIN_TICK RESET
                   "\n2. Editar "
                   "\n3. Sair " RED UNICODE_X RESET,
