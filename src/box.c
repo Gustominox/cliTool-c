@@ -201,12 +201,10 @@ char *makeBox(char text[], size_t h_border, size_t v_border)
 int main()
 {
 
-
-
     char *str = makeBox(" MENU" RED UNICODE_X RESET
                   "\n1. Jogar" GREEN THIN_TICK RESET
                   "\n2. Editar "
-                  "\n3. Sair " RED UNICODE_X UNICODE_X RESET,
+                  "\n3. Sair " RED UNICODE_X RESET,
                   4, 4);
     printf("%s", str);
     free(str);
