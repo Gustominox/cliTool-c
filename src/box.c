@@ -158,8 +158,9 @@ size_t maxArgsSize(char **args)
     }
     return max;
 }
-char *makeBox(char text[], size_t h_border, size_t v_border, char *output)
+char *makeBox(char text[], size_t h_border, size_t v_border)
 {
+    char *output = NULL;
     char *text_p = strdup(text);
     char *text_p_free = text_p;
     char **args = malloc(sizeof(char *) * 100);
@@ -200,14 +201,13 @@ char *makeBox(char text[], size_t h_border, size_t v_border, char *output)
 int main()
 {
 
-    char *str = NULL;
 
 
-    str = makeBox(" MENU" RED UNICODE_X BOLD_BLUE
-                  "\n1. Jogar" GREEN THIN_TICK BOLD_BLUE
+    char *str = makeBox(" MENU" RED UNICODE_X RESET
+                  "\n1. Jogar" GREEN THIN_TICK RESET
                   "\n2. Editar "
-                  "\n3. Sair " RED UNICODE_X UNICODE_X BOLD_BLUE,
-                  2, 1, str);
+                  "\n3. Sair " RED UNICODE_X UNICODE_X RESET,
+                  4, 4);
     printf("%s", str);
     free(str);
 }
