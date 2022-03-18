@@ -2,4 +2,4 @@
 
 set -xe
 
-valgrind --leak-check=full ./box
+valgrind --leak-check=full ./program
