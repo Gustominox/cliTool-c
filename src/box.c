@@ -5,13 +5,16 @@
 #include "ball.h"
 #include <unistd.h>
 
-struct menu{
-    char *content;
-    int n_elem;
+struct menu
+{
+    // MENU pai;
+    char **items;
+    int n_item;
     int h_border;
     int v_border;
     int selected;
-}; 
+    // MENU *sub_menus;
+};
 
 char *strcatrealloc(char *str1, char str2[])
 {
@@ -166,27 +169,40 @@ size_t maxArgsSize(char **args)
     }
     return max;
 }
-char *makeBox(char text[], size_t h_border, size_t v_border, int selected)
+
+char **processArgs(char text[])
 {
-    char *output = NULL;
+    char *token;
     char *text_p = strdup(text);
     char *text_p_free = text_p;
     char **args = malloc(sizeof(char *) * 100);
-    char *token;
-    int num_args = 0, k = 0;
+
+    int num_args = 0;
+
     while ((token = strtok_r(text_p, "\n", &text_p)))
     {
         args[num_args] = strdup(token);
         num_args++;
     }
     args[num_args] = NULL;
+
+    free(text_p_free);
+    return args;
+}
+
+char *makeBox(char text[], size_t h_border, size_t v_border, int selected)
+{
+    char *output = NULL;
+    int k = 0;
+
+    char **args = processArgs(text);
+
     size_t max_args_size = maxArgsSize(args);
     size_t col = max_args_size + (2 * h_border);
     output = addHead(col, output);
 
     output = addVBorder(v_border, col, output);
-    if (selected >= num_args)
-        perror("ERROR: Selected index out of bounds");
+
     while (args[k])
     {
         char *color;
@@ -202,7 +218,7 @@ char *makeBox(char text[], size_t h_border, size_t v_border, int selected)
     output = addClose(col, output);
 
     // Free dynamic memory
-    free(text_p_free);
+
     int j = 0;
     while (args[j])
     {
@@ -213,26 +229,105 @@ char *makeBox(char text[], size_t h_border, size_t v_border, int selected)
     return output;
 }
 
-void printMenu(MENU menu)
+void printMenuBox(MENU menu)
 {
-    char *str = makeBox(menu->content, menu->h_border, menu->v_border, menu->selected);
-    printf("%s", str);
-    free(str);
+
+    char **items = menu->items;
+    size_t h_border = menu->h_border;
+    size_t v_border = menu->v_border;
+    int selected = menu->selected;
+
+    char *output = NULL;
+    int k = 0;
+
+    size_t max_args_size = maxArgsSize(items);
+    size_t col = max_args_size + (2 * h_border);
+    output = addHead(col, output);
+
+    output = addVBorder(v_border, col, output);
+
+    while (items[k])
+    {
+        char *color;
+        if (k == selected)
+            color = BOLD_YELLOW;
+        else
+            color = RESET;
+
+        output = addLine(items[k], color, h_border, max_args_size, output);
+        k++;
+    }
+    output = addVBorder(v_border, col, output);
+    output = addClose(col, output);
+
+    // Free dynamic memory
+
+    // int j = 0;
+    // while (args[j])
+    // {
+    //     free(args[j]);
+    //     j++;
+    // }
+    // free(args);
+
+    printf("%s", output);
+    free(output);
 }
 
-void innitMenu(MENU m, char content[], int n_elem, int h_border, int v_border, int selected)
+void addMenuItem(MENU menu, char *item)
 {
-    m->content = strdup(content);
-    m->n_elem = n_elem;
-    m->h_border = h_border;
-    m->v_border = v_border;
-    m->selected = selected;
+    menu->items[menu->n_item] = strdup(item);
+    menu->n_item++;
+    menu->items = realloc(menu->items, sizeof(char *) * (menu->n_item + 1));
+    menu->items[menu->n_item] = NULL;
+}
+
+void innitMenu(MENU m)
+{
+    // m->pai = NULL;
+
+    m->items = malloc(sizeof(char *));
+    m->items[0] = NULL;
+
+    m->n_item = 0;
+    m->selected = 1;
+
+    m->h_border = 0;
+    m->v_border = 0;
+
+    // m->sub_menus = malloc(sizeof(MENU));
+    // m->sub_menus[0] = NULL;
 }
 
 void freeMenu(MENU menu)
 {
-    free(menu->content);
     free(menu);
+}
+
+void setHBorder(MENU menu, int newHBorder)
+{
+    menu->h_border = newHBorder;
+}
+
+int getHBorder(MENU menu)
+{
+    return menu->h_border;
+}
+
+void setVBorder(MENU menu, int newVBorder)
+{
+    menu->v_border = newVBorder;
+}
+
+int getVBorder(MENU menu)
+{
+    return menu->v_border;
+}
+
+void setHVBorder(MENU menu, int newHBorder, int newVBorder)
+{
+    menu->h_border = newHBorder;
+    menu->v_border = newVBorder;
 }
 
 void setSelected(MENU menu, int newSelected)
@@ -245,14 +340,14 @@ int getSelected(MENU menu)
     return menu->selected;
 }
 
-void setNElem(MENU menu, int newNElem)
+void setNItem(MENU menu, int newNItem)
 {
-    menu->n_elem = newNElem;
+    menu->n_item = newNItem;
 }
 
-int getNElem(MENU menu)
+int getNItem(MENU menu)
 {
-    return menu->n_elem;
+    return menu->n_item;
 }
 
 void contentUp(MENU menu)
@@ -263,7 +358,7 @@ void contentUp(MENU menu)
 
 void contentDown(MENU menu)
 {
-    if (getSelected(menu) + 1 < getNElem(menu))
+    if (getSelected(menu) + 1 < getNItem(menu))
         setSelected(menu, getSelected(menu) + 1);
 }
 

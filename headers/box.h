@@ -108,15 +108,27 @@ char *makeBox(char text[], size_t h_border, size_t v_border, int selected);
  *                           4, 4);
  */
 
-void printMenu(MENU menu);
+void printMenuBox(MENU menu);
 
-void innitMenu(MENU m, char content[], int n_elem, int h_border, int v_border, int selected);
+void innitMenu(MENU m);
 
 void freeMenu(MENU menu);
+
+void addMenuItem(MENU menu, char item[]);
 
 void setSelected(MENU menu, int newSelected);
 
 int getSelected(MENU menu);
+
+void setHBorder(MENU menu, int newHBorder);
+
+int getHBorder(MENU menu);
+
+void setVBorder(MENU menu, int newVBorder);
+
+int getVBorder(MENU menu);
+
+void setHVBorder(MENU menu, int newHBorder, int newVBorder);
 
 void contentUp(MENU menu);
 

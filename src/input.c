@@ -54,11 +54,18 @@ int main()
 
     MENU caixa = malloc(sizeof(MENU));
 
-    innitMenu(caixa, "   MENU\n1. Jogar" GREEN THIN_TICK RESET "\n2. Editar "
-                     "\n3. Sair " RED UNICODE_X RESET,
-              4,2, 1, 3);
+    innitMenu(caixa);
+    setHVBorder(caixa,2,1);
+    // clearScreen();
+ 
+                      
+    addMenuItem(caixa, "   MENU");
+    addMenuItem(caixa, "1. Jogar" GREEN THIN_TICK RESET );
+    addMenuItem(caixa, "2. Editar ");
+    addMenuItem(caixa, "3. Sair " RED UNICODE_X RESET);
+
     clearScreen();
-    printMenu(caixa);
+    printMenuBox(caixa);
 
     char c;
     while ((c = getch()))
@@ -85,7 +92,13 @@ int main()
                 break;
             }
         }
+        else
+        {
+            break;
+        }
+
         clearScreen();
-        printMenu(caixa);
+        printMenuBox(caixa);
     }
+    // freeMenu(caixa);
 }
