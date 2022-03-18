@@ -3,6 +3,15 @@
 #include "colors.h"
 #include "fruits.h"
 #include "ball.h"
+#include <unistd.h>
+
+struct menu{
+    char *content;
+    int n_elem;
+    int h_border;
+    int v_border;
+    int selected;
+}; 
 
 char *strcatrealloc(char *str1, char str2[])
 {
@@ -13,7 +22,6 @@ char *strcatrealloc(char *str1, char str2[])
     }
     size_t str2len = strlen(str2);
 
-    // char *strdest = (char *)malloc(sizeof(char));
     // It's easy to forget that strlen doesn't count the
     // trailing NULL character,
     size_t neededbufferlen = str1len + str2len + 1;
@@ -158,14 +166,13 @@ size_t maxArgsSize(char **args)
     }
     return max;
 }
-char *makeBox(char text[], size_t h_border, size_t v_border)
+char *makeBox(char text[], size_t h_border, size_t v_border, int selected)
 {
     char *output = NULL;
     char *text_p = strdup(text);
     char *text_p_free = text_p;
     char **args = malloc(sizeof(char *) * 100);
     char *token;
-    int selected = 4;
     int num_args = 0, k = 0;
     while ((token = strtok_r(text_p, "\n", &text_p)))
     {
@@ -206,24 +213,67 @@ char *makeBox(char text[], size_t h_border, size_t v_border)
     return output;
 }
 
-struct box
+void printMenu(MENU menu)
 {
-    char **color;
-    char **items;
-};
-
-int main()
-{
-    
-    char *str = makeBox(ball,
-                        4, 4);
-    printf("%s", str);
-
-    str = makeBox(" MENU" RED UNICODE_X RESET
-                  "\n1. Jogar" GREEN THIN_TICK RESET
-                  "\n2. Editar "
-                  "\n3. Sair " RED UNICODE_X RESET,
-                  4, 4);
+    char *str = makeBox(menu->content, menu->h_border, menu->v_border, menu->selected);
     printf("%s", str);
     free(str);
 }
+
+void innitMenu(MENU m, char content[], int n_elem, int h_border, int v_border, int selected)
+{
+    m->content = strdup(content);
+    m->n_elem = n_elem;
+    m->h_border = h_border;
+    m->v_border = v_border;
+    m->selected = selected;
+}
+
+void freeMenu(MENU menu)
+{
+    free(menu->content);
+    free(menu);
+}
+
+void setSelected(MENU menu, int newSelected)
+{
+    menu->selected = newSelected;
+}
+
+int getSelected(MENU menu)
+{
+    return menu->selected;
+}
+
+void setNElem(MENU menu, int newNElem)
+{
+    menu->n_elem = newNElem;
+}
+
+int getNElem(MENU menu)
+{
+    return menu->n_elem;
+}
+
+void contentUp(MENU menu)
+{
+    if (getSelected(menu) - 1 > 0)
+        setSelected(menu, getSelected(menu) - 1);
+}
+
+void contentDown(MENU menu)
+{
+    if (getSelected(menu) + 1 < getNElem(menu))
+        setSelected(menu, getSelected(menu) + 1);
+}
+
+// int main()
+// {
+//     MENU caixa = malloc(sizeof(MENU));
+//     innitMenu(caixa, " MENU" RED UNICODE_X RESET "\n1. Jogar" GREEN THIN_TICK RESET "\n2. Editar "
+//                      "\n3. Sair " RED UNICODE_X RESET,
+//               2, 2, 3);
+//     printMenu(caixa);
+
+//     freeMenu(caixa);
+// }

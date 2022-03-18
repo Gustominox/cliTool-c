@@ -13,7 +13,7 @@
  * @field   numLin        O número da linha atual
  * @field   numLinTotal   O número de linhas totais
  */
-typedef struct box *BOX;
+typedef struct menu *MENU;
 
 /**
  * \brief Function that concatenates a dynamic string with a string literal
@@ -99,7 +99,7 @@ size_t maxArgsSize(char **args);
  * @return Dynamic string that contains the box specified in the function arguments
  *
  */
-char *makeBox(char text[], size_t h_border, size_t v_border);
+char *makeBox(char text[], size_t h_border, size_t v_border, int selected);
 /**
  * Example Call: char *str = makeBox(" MENU" RED UNICODE_X RESET
  *                           "\n1. Jogar" GREEN THIN_TICK RESET
@@ -107,5 +107,19 @@ char *makeBox(char text[], size_t h_border, size_t v_border);
  *                           "\n3. Sair " RED UNICODE_X RESET,
  *                           4, 4);
  */
+
+void printMenu(MENU menu);
+
+void innitMenu(MENU m, char content[], int n_elem, int h_border, int v_border, int selected);
+
+void freeMenu(MENU menu);
+
+void setSelected(MENU menu, int newSelected);
+
+int getSelected(MENU menu);
+
+void contentUp(MENU menu);
+
+void contentDown(MENU menu);
 
 #endif // BOX_H_
