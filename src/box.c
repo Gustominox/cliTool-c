@@ -13,7 +13,7 @@ struct menu
     int h_border;
     int v_border;
     int selected;
-    // MENU *sub_menus;
+    struct menu **sub_menus;
 };
 
 char *strcatrealloc(char *str1, char str2[])
@@ -282,6 +282,17 @@ void addMenuItem(MENU menu, char *item)
     menu->items[menu->n_item] = NULL;
 }
 
+void addMenuItems(MENU menu, char *items[])
+{
+    int i = 0;
+    while (items[i])
+    {
+        addMenuItem(menu, items[i]);
+        i++;
+    }
+}
+
+
 void innitMenu(MENU m)
 {
     // m->pai = NULL;
@@ -295,14 +306,31 @@ void innitMenu(MENU m)
     m->h_border = 0;
     m->v_border = 0;
 
-    // m->sub_menus = malloc(sizeof(MENU));
-    // m->sub_menus[0] = NULL;
+    m->sub_menus = malloc(sizeof(MENU));
+    m->sub_menus[0] = NULL;
+}
+// free dynamic memory of menu
+void freeMenu(MENU m)
+{
+    int i = 0;
+    while (m->items[i])
+    {
+        free(m->items[i]);
+        i++;
+    }
+    free(m->items);
+
+    // int j = 0;
+    // while (m->sub_menus[j])
+    // {
+    //     freeMenu(m->sub_menus[j]);
+    //     j++;
+    // }
+    // free(m->sub_menus);
+
+    free(m);
 }
 
-void freeMenu(MENU menu)
-{
-    free(menu);
-}
 
 void setHBorder(MENU menu, int newHBorder)
 {
