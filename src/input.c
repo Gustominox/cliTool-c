@@ -1,10 +1,13 @@
 #include <unistd.h>
 #include <termios.h>
 #include <stdio.h>
+#include <sys/ioctl.h>
 #include "input.h"
 #include "unicode.h"
 #include "colors.h"
 #include "box.h"
+#define clearScreen() printf("\033[1;1H\033[2J")
+#define moveCursorTo(x, y) printf("\033[%d;%dH", (y), (x)); // Move cursor to (x, y)
 
 char getch()
 {
@@ -44,45 +47,52 @@ char getch()
     return (buf);
 }
 
-void clearScreen()
+// void clearScreen()
+// {
+//     printf("\033[1;1H\033[2J");
+// }
+
+// https://stackoverflow.com/questions/5167269/how-to-get-the-size-of-the-terminal-window-in-a-unix-shell
+int getTerminalSize(int *rows, int *cols)
 {
-    printf("\033[1;1H\033[2J");
+    struct winsize w;
+    if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &w) == -1)
+        return -1;
+    *rows = w.ws_row;
+    *cols = w.ws_col;
+    return 0;
 }
 
-int main()
+void menuLoop(MENU menu)
 {
-
-    MENU caixa = malloc(sizeof(MENU));
-
-    innitMenu(caixa);
-    setHVBorder(caixa,2,1);
-    // clearScreen();
- 
-                      
-    addMenuItem(caixa, "   MENU");
-    addMenuItem(caixa, "1. Jogar" GREEN THIN_TICK RESET );
-    addMenuItem(caixa, "2. Editar ");
-    addMenuItem(caixa, "3. Sair " RED UNICODE_X RESET);
+    int rows, cols;
 
     clearScreen();
-    printMenuBox(caixa);
+    printMenuBox(menu);
 
     char c;
     while ((c = getch()))
     {
+        // print menu
+        // getTerminalSize(&rows, &cols);
+        // printf("%d %d", rows, cols);
+
         // printf("CHAR: %d\n", c); DEBUG
 
-        if (c == '\033')
-        { // if the first value is esc
+        switch (c)
+        {
+
+        case '\033': // ESC
+                     // if the first value is esc
 
             getch(); // skip the [
             switch (getch())
             {         // the real value
             case 'A': // code for arrow up
-                contentUp(caixa);
+                contentUp(menu);
                 break;
             case 'B': // code for arrow down
-                contentDown(caixa);
+                contentDown(menu);
                 break;
             case 'C': // code for arrow right
 
@@ -91,14 +101,38 @@ int main()
 
                 break;
             }
-        }
-        else
-        {
+            break;
+        case '\n': // CHOOSE A SUBMENU
+
+            break;
+        default:
+
             break;
         }
 
         clearScreen();
-        printMenuBox(caixa);
+        printMenuBox(menu);
     }
+}
+
+int main()
+{
+
+    MENU caixa = malloc(sizeof(MENU));
+
+    innitMenu(caixa);
+    setHVBorder(caixa, 2, 1);
+    // clearScreen();
+
+    addMenuItem(caixa, "   MENU");
+    addMenuItem(caixa, "1. Jogar" GREEN THIN_TICK RESET);
+    addMenuItem(caixa, "2. Editar ");
+    addMenuItem(caixa, "3. Sair " RED UNICODE_X RESET);
+
+    menuLoop(caixa);
+    // clearScreen();
+
     // freeMenu(caixa);
+
+    return 0;
 }
