@@ -104,6 +104,8 @@ void menuLoop(MENU menu)
             break;
         case '\n': // CHOOSE A SUBMENU
 
+            menu = getSubMenu(menu, 0);
+
             break;
         default:
 
@@ -118,9 +120,13 @@ void menuLoop(MENU menu)
 int main()
 {
 
-    MENU caixa = malloc(sizeof(MENU));
+    MENU caixa = innitMenu();
 
-    innitMenu(caixa);
+    MENU caixa2 = innitMenu();
+
+    addSubMenu(caixa, caixa2);
+
+
     setHVBorder(caixa, 2, 1);
     // clearScreen();
 
@@ -128,6 +134,10 @@ int main()
     addMenuItem(caixa, "1. Jogar" GREEN THIN_TICK RESET);
     addMenuItem(caixa, "2. Editar ");
     addMenuItem(caixa, "3. Sair " RED UNICODE_X RESET);
+
+    setHVBorder(caixa2, 2, 1);
+
+
 
     menuLoop(caixa);
     // clearScreen();

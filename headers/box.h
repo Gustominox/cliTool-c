@@ -110,7 +110,11 @@ char *makeBox(char text[], size_t h_border, size_t v_border, int selected);
 
 void printMenuBox(MENU menu);
 
-void innitMenu(MENU m);
+MENU innitMenu();
+
+MENU getSubMenu(MENU menu, int index );
+
+void addSubMenu(MENU menu, MENU subMenu);
 
 void freeMenu(MENU menu);
 
