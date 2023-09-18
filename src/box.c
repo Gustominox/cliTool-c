@@ -7,7 +7,7 @@
 
 struct menu
 {
-    // MENU pai;
+    MENU father;
     char **items;
     int n_item;
     int h_border;
@@ -18,8 +18,9 @@ struct menu
 
 MENU innitMenu()
 {
-    // m->pai = NULL;
     MENU m = malloc(sizeof(struct menu));
+
+    m->father = NULL;
 
     m->items = malloc(sizeof(char *));
     m->items[0] = NULL;
@@ -38,17 +39,18 @@ MENU innitMenu()
 
 MENU getSubMenu(MENU menu, int index)
 {
+    printf("VALID SUBMENU AT INDEX [%d]\n", getSelected(menu) - 1);
 
     return menu->sub_menus[index];
 }
 
 void addSubMenu(MENU menu, MENU subMenu)
 {
-
+    setFather(subMenu, menu);
     menu->sub_menus[0] = subMenu;
     // menu->n_item++;
     menu->sub_menus = realloc(menu->sub_menus, sizeof(MENU) * (0 + 1));
-    menu->items[1] = NULL;
+    menu->sub_menus[1] = NULL;
 }
 
 char *strcatrealloc(char *str1, char str2[])
@@ -266,8 +268,10 @@ char *makeBox(char text[], size_t h_border, size_t v_border, int selected)
 
 void printMenuBox(MENU menu)
 {
+    printf("%s\n", menu->items[0]);
 
     char **items = menu->items;
+
     size_t h_border = menu->h_border;
     size_t v_border = menu->v_border;
     int selected = menu->selected;
@@ -347,6 +351,16 @@ void freeMenu(MENU m)
     // free(m->sub_menus);
 
     free(m);
+}
+
+void setFather(MENU subMenu, MENU menu)
+{
+    subMenu->father = menu;
+}
+
+MENU getFather(MENU menu)
+{
+    return menu->father;
 }
 
 void setHBorder(MENU menu, int newHBorder)

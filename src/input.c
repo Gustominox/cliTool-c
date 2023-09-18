@@ -102,10 +102,19 @@ void menuLoop(MENU menu)
                 break;
             }
             break;
-        case '\n': // CHOOSE A SUBMENU
+        case '\n':; // CHOOSE A SUBMENU
 
-            menu = getSubMenu(menu, 0);
-
+            MENU newMenu = getSubMenu(menu, getSelected(menu) - 1);
+            if (newMenu) // check if it is a valid subMenu
+            {
+                menu = newMenu;
+                printf("VALID SUBMENU\n");
+            }
+            else if ((newMenu = getFather(menu)))
+            {
+                menu = newMenu;
+                printf("VALID FATHER\n");
+            }
             break;
         default:
 
@@ -124,9 +133,6 @@ int main()
 
     MENU caixa2 = innitMenu();
 
-    addSubMenu(caixa, caixa2);
-
-
     setHVBorder(caixa, 2, 1);
     // clearScreen();
 
@@ -134,13 +140,20 @@ int main()
     addMenuItem(caixa, "1. Jogar" GREEN THIN_TICK RESET);
     addMenuItem(caixa, "2. Editar ");
     addMenuItem(caixa, "3. Sair " RED UNICODE_X RESET);
+    addMenuItem(caixa, "3. Sair " RED UNICODE_X RESET);
+    addMenuItem(caixa, "3. Sair " RED UNICODE_X RESET);
+    addMenuItem(caixa, "3. Sair " RED UNICODE_X RESET);
 
     setHVBorder(caixa2, 2, 1);
 
+    addMenuItem(caixa2, "   MENU 2");
+    addMenuItem(caixa2, "1. Facil");
+    addMenuItem(caixa2, "2. Casual");
+    addMenuItem(caixa2, "3. Experiente");
 
+    addSubMenu(caixa, caixa2);
 
     menuLoop(caixa);
-    // clearScreen();
 
     // freeMenu(caixa);
 
