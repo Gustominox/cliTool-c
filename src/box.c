@@ -37,7 +37,7 @@ MENU innitMenu()
     return m;
 }
 
-char *strcatrealloc(char *str1, char str2[])
+char *strcatrealloc_old(char *str1, char str2[])
 {
     size_t str1len = 0;
     if (str1)
@@ -68,6 +68,27 @@ char *strcatrealloc(char *str1, char str2[])
         free(str1);
 
     return strdest;
+}
+
+char *strcatrealloc(char *str1, char str2[])
+{
+    if (!str2)
+        return str1; // Se str2 for NULL, retorna str1 sem mudanças.
+
+    size_t str1len = (str1) ? strlen(str1) : 0;
+    size_t str2len = strlen(str2);
+
+    // Realoca memória para str1, expandindo-a para acomodar str2 + '\0'
+    char *new_str = realloc(str1, str1len + str2len + 1);
+    if (!new_str)
+    {
+        return str1; // Se a realocação falhar, retorna a string original
+    }
+
+    // Copia ou concatena os dados na memória realocada
+    strcpy(new_str + str1len, str2);
+
+    return new_str;
 }
 
 char *addHead(size_t col, char *output)
