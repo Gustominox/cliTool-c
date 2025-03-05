@@ -108,12 +108,13 @@ char *makeBox(char text[], size_t h_border, size_t v_border, int selected);
  *                           4, 4);
  */
 
+char *boxFit(char text[], size_t h_border, size_t v_border);
 
 void printMenuBox(MENU menu);
 
 MENU innitMenu();
 
-MENU getSubMenu(MENU menu, int index );
+MENU getSubMenu(MENU menu, int index);
 
 void addSubMenu(MENU menu, MENU subMenu, size_t index);
 
@@ -121,7 +122,7 @@ void freeMenu(MENU menu);
 
 void addMenuItem(MENU menu, char item[]);
 
-void setFather(MENU subMenu,MENU menu);
+void setFather(MENU subMenu, MENU menu);
 
 MENU getFather(MENU menu);
 

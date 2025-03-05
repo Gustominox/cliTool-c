@@ -37,7 +37,6 @@ MENU innitMenu()
     return m;
 }
 
-
 char *strcatrealloc(char *str1, char str2[])
 {
     size_t str1len = 0;
@@ -251,6 +250,40 @@ char *makeBox(char text[], size_t h_border, size_t v_border, int selected)
     return output;
 }
 
+char *boxFit(char text[], size_t h_border, size_t v_border)
+{
+    char *output = NULL;
+    int k = 0;
+
+    char **args = processArgs(text);
+
+    size_t max_args_size = maxArgsSize(args);
+    size_t col = max_args_size + (2 * h_border);
+    output = addHead(col, output);
+
+    output = addVBorder(v_border, col, output);
+
+    while (args[k])
+    {
+        char *color = RESET;
+        output = addLine(args[k], color, h_border, max_args_size, output);
+        k++;
+    }
+    output = addVBorder(v_border, col, output);
+    output = addClose(col, output);
+
+    // Free dynamic memory
+
+    int j = 0;
+    while (args[j])
+    {
+        free(args[j]);
+        j++;
+    }
+    free(args);
+    return output;
+}
+
 void printMenuBox(MENU menu)
 {
     printf("%s\n", menu->items[0]);
@@ -305,10 +338,9 @@ void addMenuItem(MENU menu, char *item)
     menu->items = realloc(menu->items, sizeof(char *) * (menu->n_item + 1));
     menu->items[menu->n_item] = NULL;
 
-    // alloc size for submenu entry 
+    // alloc size for submenu entry
     menu->sub_menus = realloc(menu->sub_menus, sizeof(MENU) * (menu->n_item + 1));
     menu->sub_menus[menu->n_item] = NULL;
-
 }
 
 void addMenuItems(MENU menu, char *items[])
@@ -324,14 +356,13 @@ void addMenuItems(MENU menu, char *items[])
 MENU getSubMenu(MENU menu, int index)
 {
     printf("VALID SUBMENU AT INDEX [%d]\n", getSelected(menu) - 1);
-    return menu->sub_menus[index] ;
+    return menu->sub_menus[index];
 }
 
 void addSubMenu(MENU menu, MENU subMenu, size_t index)
 {
     setFather(subMenu, menu);
     menu->sub_menus[index] = subMenu;
-    
 }
 
 // free dynamic memory of menu
