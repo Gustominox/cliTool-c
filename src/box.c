@@ -40,12 +40,13 @@ MENU innitMenu()
 MENU getSubMenu(MENU menu, int index)
 {
     printf("VALID SUBMENU AT INDEX [%d]\n", getSelected(menu) - 1);
-
+    // TODO: Check if sub menu exists
     return menu->sub_menus[index];
 }
 
 void addSubMenu(MENU menu, MENU subMenu)
 {
+    // TODO: Add sub menu should receive index for the sub menu
     setFather(subMenu, menu);
     menu->sub_menus[0] = subMenu;
     // menu->n_item++;
