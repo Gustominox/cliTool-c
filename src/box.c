@@ -324,7 +324,6 @@ void addMenuItems(MENU menu, char *items[])
 MENU getSubMenu(MENU menu, int index)
 {
     printf("VALID SUBMENU AT INDEX [%d]\n", getSelected(menu) - 1);
-    // TODO: Check if sub menu exists
     return menu->sub_menus[index] ;
 }
 
