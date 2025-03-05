@@ -151,7 +151,7 @@ int main()
     addMenuItem(caixa2, "2. Casual");
     addMenuItem(caixa2, "3. Experiente");
 
-    addSubMenu(caixa, caixa2);
+    addSubMenu(caixa, caixa2, 0);
 
     menuLoop(caixa);
 

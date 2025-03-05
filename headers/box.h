@@ -115,7 +115,7 @@ MENU innitMenu();
 
 MENU getSubMenu(MENU menu, int index );
 
-void addSubMenu(MENU menu, MENU subMenu);
+void addSubMenu(MENU menu, MENU subMenu, size_t index);
 
 void freeMenu(MENU menu);
 

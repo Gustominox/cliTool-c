@@ -37,22 +37,6 @@ MENU innitMenu()
     return m;
 }
 
-MENU getSubMenu(MENU menu, int index)
-{
-    printf("VALID SUBMENU AT INDEX [%d]\n", getSelected(menu) - 1);
-    // TODO: Check if sub menu exists
-    return menu->sub_menus[index];
-}
-
-void addSubMenu(MENU menu, MENU subMenu)
-{
-    // TODO: Add sub menu should receive index for the sub menu
-    setFather(subMenu, menu);
-    menu->sub_menus[0] = subMenu;
-    // menu->n_item++;
-    menu->sub_menus = realloc(menu->sub_menus, sizeof(MENU) * (0 + 1));
-    menu->sub_menus[1] = NULL;
-}
 
 char *strcatrealloc(char *str1, char str2[])
 {
@@ -320,6 +304,11 @@ void addMenuItem(MENU menu, char *item)
     menu->n_item++;
     menu->items = realloc(menu->items, sizeof(char *) * (menu->n_item + 1));
     menu->items[menu->n_item] = NULL;
+
+    // alloc size for submenu entry 
+    menu->sub_menus = realloc(menu->sub_menus, sizeof(MENU) * (menu->n_item + 1));
+    menu->sub_menus[menu->n_item] = NULL;
+
 }
 
 void addMenuItems(MENU menu, char *items[])
@@ -330,6 +319,20 @@ void addMenuItems(MENU menu, char *items[])
         addMenuItem(menu, items[i]);
         i++;
     }
+}
+
+MENU getSubMenu(MENU menu, int index)
+{
+    printf("VALID SUBMENU AT INDEX [%d]\n", getSelected(menu) - 1);
+    // TODO: Check if sub menu exists
+    return menu->sub_menus[index] ;
+}
+
+void addSubMenu(MENU menu, MENU subMenu, size_t index)
+{
+    setFather(subMenu, menu);
+    menu->sub_menus[index] = subMenu;
+    
 }
 
 // free dynamic memory of menu
@@ -343,6 +346,7 @@ void freeMenu(MENU m)
     }
     free(m->items);
 
+    // TODO: free memory from sub menus
     // int j = 0;
     // while (m->sub_menus[j])
     // {
