@@ -24,6 +24,6 @@ int main()
 
     char *output = boxFit(ball_art, 0, 0);
     printf("%s", output);
-
+    free(output);
     return 0;
 }
